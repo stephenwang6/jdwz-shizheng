@@ -211,7 +211,7 @@ function renderHome() {
   const practiced = answeredIds(), correct = correctIds(), wrong = wrongIds(), favorites = favoriteIds();
   const randomCount = bank.filter(q => !state.skipCorrect || !state.records[q.id] || state.records[q.id].correct !== true).length;
   const modes = [
-    ["random","随机练习",state.skipCorrect?"未答对题目随机练习":"全部题目随机练习",randomCount],
+    ["random","随机练习",(state.skipCorrect?"未答对题目":"全部题目")+"随机抽取，每次最多15题",Math.min(15,randomCount)],
     ["exam","模拟考试","随机抽取最多50题",Math.min(50,bank.length)],
     ["wrong","答错的题","重新答对后自动移出",wrong.length],
     ["correct","答对的题","历史记录当前为正确",correct.length],
@@ -238,7 +238,7 @@ function renderHome() {
 function startMode(mode) {
   if (mode === "exam") { startExam(); return; }
   let ids=[], title="";
-  if (mode === "random") { ids=bank.filter(q=>!state.skipCorrect||!state.records[q.id]||state.records[q.id].correct!==true).map(q=>q.id); ids=shuffle(ids); title="随机练习"; }
+  if (mode === "random") { ids=bank.filter(q=>!state.skipCorrect||!state.records[q.id]||state.records[q.id].correct!==true).map(q=>q.id); ids=shuffle(ids).slice(0,15); title="随机练习"; }
   if (mode === "wrong") { ids=wrongIds().map(Number); title="答错的题"; }
   if (mode === "correct") { ids=correctIds().map(Number); title="答对的题"; }
   if (mode === "favorite") { ids=favoriteIds().map(Number); title="收藏练习"; }
